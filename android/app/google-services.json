@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "137307556730",
+    "project_id": "dislexity",
+    "storage_bucket": "dislexity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137307556730:android:da38f1afb3a1f56a8224c3",
+        "android_client_info": {
+          "package_name": "com.dislexity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137307556730-96og22dsdeu4u5idvtqinbo1jgb6befm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dislexity",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "137307556730-bqogsnhif49c953p9h738gqu7b50o2in.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4UnLZUcP1NADHUTX3VBncKOtK0ldQz6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137307556730-bqogsnhif49c953p9h738gqu7b50o2in.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
