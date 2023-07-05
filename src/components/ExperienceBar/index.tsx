@@ -4,8 +4,8 @@ import { StyleSheet } from 'react-native';
 import { Container, TextExperience, Experience, ExperienceCurrent, TextExperienceCurrent } from './styles';
 
 export function ExperienceBar() {
-  const level = 3;
-  const currentExperience = 70;
+  const level = 1;
+  const currentExperience = 0;
   const challengesCompleted = 0;
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2);

@@ -9,7 +9,6 @@ export const Wrapper = styled.View`
 export const Container = styled.View`
   flex: 1;
   padding: ${RFValue(20)}px;
-  align-items: center;
 `;
 
 export const Title = styled.Text`
@@ -24,7 +23,7 @@ export const Challenge = styled(RectButton)`
   height: ${RFValue(150)}px;
   border-radius: ${RFValue(16)}px;
   padding: ${RFValue(20)}px;
-  margin: ${RFValue(5)}px;
+  margin: ${RFValue(5)}px 0px;
   background: ${({ theme }) => theme.colors.white};
   justify-content: space-between;
 `;
