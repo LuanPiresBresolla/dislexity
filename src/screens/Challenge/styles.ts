@@ -41,6 +41,7 @@ export const OptionsContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: ${RFValue(10)}px;
 `;
 

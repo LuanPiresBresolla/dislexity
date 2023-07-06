@@ -5,9 +5,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from '@components/Button';
 
 import { Container, Header, Image, OptionButton, OptionButtonText, OptionsContainer, Title } from './styles';
-import { Alert, View } from 'react-native';
+import { Alert, TouchableWithoutFeedback, View } from 'react-native';
 import { Loading } from '@components/Loading';
 import { ButtonGoBack } from '@components/ButtonGoBack';
+import { speak } from 'expo-speech';
+import { Speak } from '@utils/Speak';
 
 interface IChallenge {
   id: string;
@@ -16,6 +18,7 @@ interface IChallenge {
   image_url: string;
   options: string[];
   xp: number;
+  created_at: number;
 }
 
 export function Challenge() {
@@ -32,10 +35,14 @@ export function Challenge() {
   const [optionSelected, setOptionSelected] = useState<string | null>(null);
 
   const challenge = challenges[currentChallenge];
+  const question = 'Qual é o animal?';
+  const congratulations = 'Parabéns, você acertou!';
+  const nextLevel = 'Vamos avançar para o próximo nível';
 
   useEffect(() => {
     firestore()
       .collection(collection)
+      .orderBy('created_at')
       .get()
       .then(response => {
         const data = response.docs.map(doc => ({
@@ -49,11 +56,20 @@ export function Challenge() {
       });
   }, [collection]);
 
+  useEffect(() => {
+    if (!loading) handleSpeakTitle();
+  }, [loading]);
+
+  function handleSpeakTitle() {
+    Speak(question);
+  }
+
   function handleConfirm() {
     if (challenge.correct_option === optionSelected) {
+      Speak(congratulations + nextLevel);
       Alert.alert(
-        'Parábens, você acertou!',
-        'Vamos avançar para o próximo nível 🚀',
+        congratulations,
+        nextLevel + ' 🚀',
         [
           {
             text: 'Continuar',
@@ -72,6 +88,11 @@ export function Challenge() {
     }
   }
 
+  function handleSetOption(option: string) {
+    Speak(option);
+    setOptionSelected(option);
+  }
+
   if (!challenge || loading) {
     return <Loading loading message="Carregando seus desafios, aguarde..." />
   }
@@ -81,7 +102,9 @@ export function Challenge() {
 
       <Header>
         <ButtonGoBack />
-        <Title>Qual é o animal? 🧐</Title>
+        <TouchableWithoutFeedback onPress={handleSpeakTitle}>
+          <Title>{question} 🧐</Title>
+        </TouchableWithoutFeedback>
         <View />
       </Header>
 
@@ -91,7 +114,7 @@ export function Challenge() {
         {challenge.options.map(option => (
           <OptionButton
             key={option}
-            onPress={() => setOptionSelected(option)}
+            onPress={() => handleSetOption(option)}
             selected={option === optionSelected}
           >
             <OptionButtonText>{option}</OptionButtonText>
