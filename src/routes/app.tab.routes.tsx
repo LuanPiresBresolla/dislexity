@@ -7,7 +7,6 @@ import { Feather } from '@expo/vector-icons';
 
 
 import { Home } from '@screens/Home';
-import { Profile } from '@screens/Profile';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -41,7 +40,7 @@ export function AppTabRoutes() {
         }}
       />
       
-      <Screen
+      {/* <Screen
         name="Profile"
         component={Profile}
         options={{
@@ -52,7 +51,7 @@ export function AppTabRoutes() {
             </TabBarIcon>
           ),
         }}
-      />
+      /> */}
     </Navigator>
   );
 }

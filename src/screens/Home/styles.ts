@@ -20,12 +20,12 @@ export const Title = styled.Text`
 
 export const Challenge = styled(RectButton)`
   width: ${RFValue(140)}px;
-  height: ${RFValue(150)}px;
   border-radius: ${RFValue(16)}px;
   padding: ${RFValue(20)}px;
   margin: ${RFValue(5)}px 0px;
   background: ${({ theme }) => theme.colors.white};
   justify-content: space-between;
+  gap: ${RFValue(10)}px;
 `;
 
 export const ChallengeContainerText = styled.View``;
@@ -40,4 +40,10 @@ export const ChallengeSubTitle = styled.Text`
   font-size: ${RFValue(12)}px;
   font-family: ${({ theme }) => theme.fonts.regular};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+export const ChallengeDone = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
+  color: ${({ theme }) => theme.colors.green};
 `;

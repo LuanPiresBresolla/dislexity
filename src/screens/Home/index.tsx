@@ -5,34 +5,76 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Header } from '@components/Header';
 import { Loading } from '@components/Loading';
+import { ExperienceBar } from '@components/ExperienceBar';
 
 import Math from '@assets/math.svg';
 
-import { Wrapper, Container, Title, Challenge, ChallengeContainerText, ChallengeTitle, ChallengeSubTitle } from './styles';
+import { Wrapper, Container, Title, Challenge, ChallengeContainerText, ChallengeTitle, ChallengeSubTitle, ChallengeDone } from './styles';
+import { useAuth } from '@context/Auth';
+import { getAvailableVoicesAsync } from 'expo-speech';
+
+export interface IChallenge {
+  id: string;
+  title: string;
+  collection: string;
+  challenges_count: number;
+  created_at: number;
+  done?: boolean;
+}
+
+export interface IChallengeUser {
+  id: string;
+  challenge_id: string;
+  user_id: string;
+  challenges_count_done: number;
+  done: boolean;
+}
 
 export function Home() {
   const { navigate } = useNavigation();
+  const { user } = useAuth();
 
-  const [loading, setLoading] = useState(true);
+  const [loadingChallenge, setLoadingChallenge] = useState(true);
+  const [loadingChallengesUser, setLoadingChallengesUser] = useState(true);
 
-  const [challenges, setChallenges] = useState<any[]>([]);
+  const loading = loadingChallenge || loadingChallengesUser;
+
+  const [challenges, setChallenges] = useState<IChallenge[]>([]);
+  const [challengesUser, setChallengesUser] = useState<IChallengeUser[]>([]);
 
   useEffect(() => {
-    firestore()
+    const subscribe = firestore()
       .collection('challenges')
-      .get()
-      .then(response => {
-        const data = response.docs.map(doc => ({
+      .onSnapshot(snapshotQuery => {
+        const data = snapshotQuery.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
-        }));
+        })) as IChallenge[];
         setChallenges(data);
-        setLoading(false);
+        setLoadingChallenge(false);
       });
+
+    return () => subscribe();
   }, []);
 
-  function handleToChallenge(collection: string) {
-    navigate('Challenge', { collection });
+  useEffect(() => {
+    const subscribe = firestore()
+      .collection('challenges_users')
+      .where('user_id', '==', user?.id)
+      .onSnapshot(snapshotQuery => {
+        const data = snapshotQuery.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as IChallengeUser[];
+        setChallengesUser(data);
+        setLoadingChallengesUser(false);
+      });
+
+    return () => subscribe();
+  }, []);
+
+  function handleToChallenge(challenge: IChallenge) {
+    navigate('Challenge', { challengeId: challenge.id, collection: challenge.collection });
   }
 
   return (
@@ -43,6 +85,8 @@ export function Home() {
 
       {!loading && (
         <Container>
+          <ExperienceBar />
+
           <Title>Desafios Disponíveis</Title>
 
           <FlatList
@@ -50,15 +94,20 @@ export function Home() {
             keyExtractor={item => item.id}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Challenge onPress={() => handleToChallenge(item.collection)}>
-                <Math />
-                <ChallengeContainerText>
-                  <ChallengeTitle>{item.title}</ChallengeTitle>
-                  <ChallengeSubTitle>{item.challenges_count} {item.challenges_count > 1 ? 'Desafios' : 'Desafio'}</ChallengeSubTitle>
-                </ChallengeContainerText>
-              </Challenge>
-            )}
+            renderItem={({ item }) => {
+              const challengeUser = challengesUser.find(challenge => challenge.challenge_id === item.id);
+
+              return (
+                <Challenge enabled={!challengeUser?.done} onPress={() => handleToChallenge(item)}>
+                  <Math />
+                  <ChallengeContainerText>
+                    <ChallengeTitle>{item.title}</ChallengeTitle>
+                    <ChallengeSubTitle>{item.challenges_count} {item.challenges_count > 1 ? 'Desafios' : 'Desafio'}</ChallengeSubTitle>
+                    {challengeUser?.done && <ChallengeDone>Concluído</ChallengeDone>}
+                  </ChallengeContainerText>
+                </Challenge>
+              )
+            }}
           />
         </Container>
       )}

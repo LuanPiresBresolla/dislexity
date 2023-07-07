@@ -9,7 +9,7 @@ declare global {
     interface RootParamList {
       SignIn: undefined;
       Main: undefined;
-      Challenge: { collection: string };
+      Challenge: { challengeId: string, collection: string };
     }
   }
 }

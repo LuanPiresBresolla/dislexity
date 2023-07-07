@@ -5,10 +5,12 @@ import { useAuth } from '@context/Auth';
 
 import { Container, UserContent, AvatarContainer, Avatar, ChatAvatarName, Welcome, UserName, Logout } from './styles';
 import { useTheme } from 'styled-components';
+import { useExperienceBar } from '@context/ExperienceBar';
 
 export function Header() {
   const { colors } = useTheme();
   const { user, signOut } = useAuth();
+  const { experience } = useExperienceBar();
 
   return (
     <Container>
@@ -22,8 +24,8 @@ export function Header() {
         </AvatarContainer>
 
         <Welcome>
-          Bem vindo,{`\n`}
-          <UserName numberOfLines={1}>{user?.name}</UserName>
+          <UserName numberOfLines={1}>{user?.name}, {`\n`}</UserName>
+          Level {experience?.level}
         </Welcome>
       </UserContent>
 

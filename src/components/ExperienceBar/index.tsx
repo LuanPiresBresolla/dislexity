@@ -2,15 +2,10 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Container, TextExperience, Experience, ExperienceCurrent, TextExperienceCurrent } from './styles';
+import { useExperienceBar } from '@context/ExperienceBar';
 
 export function ExperienceBar() {
-  const level = 1;
-  const currentExperience = 0;
-  const challengesCompleted = 0;
-
-  const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
-
-  const percentToNextLevel = (Math.round(currentExperience * 100)) / experienceToNextLevel;
+  const { currentExperience, experienceToNextLevel, percentToNextLevel } = useExperienceBar();
 
   return (
     <Container>
